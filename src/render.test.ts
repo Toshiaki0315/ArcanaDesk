@@ -103,11 +103,25 @@ describe("renderReading", () => {
     );
   });
 
-  it("shows numeral and suit symbol on the face", () => {
+  it("draws the card's picture on the face", () => {
+    renderReading(container, reading);
+    const [first, second] = container.querySelectorAll(".card");
+    expect(first.querySelector(".card-face .card-art > svg")?.getAttribute("data-major")).toBe("0");
+    const art = second.querySelector(".card-face .card-art > svg");
+    expect(art?.getAttribute("data-suit")).toBe("Cups");
+    expect(art?.querySelectorAll(".pip")).toHaveLength(1);
+  });
+
+  it("does not show the picture on the back before flipping", () => {
+    renderReading(container, reading);
+    expect(container.querySelector(".card-back svg")).toBeNull();
+  });
+
+  it("shows numeral but no text suit symbol on the face", () => {
     renderReading(container, reading);
     const second = container.querySelectorAll(".card")[1];
     expect(second.querySelector(".card-numeral")?.textContent).toBe("A");
-    expect(second.querySelector(".card-symbol")?.textContent).toBe("♥");
+    expect(second.querySelector(".card-symbol")).toBeNull();
   });
 });
 

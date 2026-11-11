@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cardNumeral, suitSymbol, toRoman } from "./card";
+import { cardNumeral, toRoman } from "./card";
 import type { Card } from "./api";
 
 const card = (id: number, name: string, suit: Card["suit"]): Card => ({
@@ -42,14 +42,5 @@ describe("cardNumeral", () => {
     expect(cardNumeral(card(75, "Knight of Pentacles", "Pentacles"))).toBe("Kn");
     expect(cardNumeral(card(76, "Queen of Pentacles", "Pentacles"))).toBe("Q");
     expect(cardNumeral(card(77, "King of Pentacles", "Pentacles"))).toBe("K");
-  });
-});
-
-describe("suitSymbol", () => {
-  it("gives every suit a distinct symbol", () => {
-    const suits: Card["suit"][] = ["Wands", "Cups", "Swords", "Pentacles", "MajorArcana"];
-    const symbols = suits.map(suitSymbol);
-    expect(new Set(symbols).size).toBe(5);
-    expect(symbols.every((s) => s.length > 0)).toBe(true);
   });
 });
