@@ -1,5 +1,7 @@
 # ArcanaDesk
 
+[![CI](https://github.com/Toshiaki0315/ArcanaDesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Toshiaki0315/ArcanaDesk/actions/workflows/ci.yml)
+
 ローカルファーストで動作するデスクトップ向けタロット占いアプリケーションです。
 Tauri v2, Rust, TypeScriptを用いて開発されています。
 
@@ -25,6 +27,12 @@ cd ..
 pnpm test                      # TypeScript ユニットテスト (vitest)
 pnpm coverage                  # TypeScript カバレッジ
 ```
+
+## CI
+GitHub Actions (`.github/workflows/ci.yml`) が main への push と PR ごとに以下を実行します。
+
+- フロントエンド: 型チェック・ビルド、vitest (カバレッジ 90% 未満で失敗)
+- Rust: `cargo fmt --check`、`cargo clippy -D warnings`、テスト (行カバレッジ 90% 未満で失敗)
 
 ## 構成
 - `src-tauri/src/tarot.rs` — `Card` / `Deck` (78枚生成・シャッフル・ドロー・正逆判定)
