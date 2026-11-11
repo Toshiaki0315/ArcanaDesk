@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArcanaDesk</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>ArcanaDesk</h1>
+      <form id="draw-form" class="controls">
+        <select id="spread-select" aria-label="スプレッド"></select>
+        <button type="submit">カードを引く</button>
+        <button type="button" id="reveal-all" class="secondary" hidden>すべてめくる</button>
+      </form>
+      <p id="error" class="error" role="alert" hidden></p>
+      <p id="warning" class="warning" role="status" hidden></p>
+      <p id="reading-caption" class="reading-caption" hidden></p>
+      <div id="reading" class="reading"></div>
+
+      <details id="history" class="history">
+        <summary>履歴 <span id="history-count" class="history-count"></span></summary>
+        <p id="history-error" class="error" role="alert" hidden></p>
+        <ul id="history-list" class="history-list"></ul>
+        <button type="button" id="history-clear" class="history-clear">すべて削除</button>
+      </details>
+    </main>
+  </body>
+</html>

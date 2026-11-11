@@ -1,0 +1,32 @@
+[package]
+name = "arcanadesk"
+version = "0.1.0"
+description = "A local-first Tarot application built with Tauri v2"
+authors = ["Toshiaki Nomura"]
+repository = "https://github.com/Toshiaki0315/ArcanaDesk.git"
+edition = "2021"
+
+[lib]
+# `_lib` suffix avoids a name clash with the bin target (cargo#8519)
+name = "arcanadesk_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rand = "0.8"
+
+[dev-dependencies]
+tauri = { version = "2", features = ["test"] }
+tempfile = "3"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true

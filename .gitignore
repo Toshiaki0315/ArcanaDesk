@@ -1,0 +1,29 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+.npm/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# Logs / editor
+*.log
+*.local
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Coverage
+coverage/
+src-tauri/tarpaulin-report.html
+src-tauri/lcov.info

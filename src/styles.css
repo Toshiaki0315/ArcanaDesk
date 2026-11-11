@@ -1,0 +1,402 @@
+:root {
+  --bg: #f4f1ea;
+  --fg: #1d1b26;
+  --muted: #6b6878;
+  --surface: #ffffff;
+  --border: #d9d4c7;
+  --accent: #6b4fbb;
+  --reversed: #b5473a;
+
+  --back-bg: #2a2150;
+  --back-line: #4a3c86;
+  --gold: #c9a24a;
+  --paper: #fbf7ec;
+  --ink: #2b2433;
+  --suit-wands: #a8572a;
+  --suit-cups: #2f6e9e;
+  --suit-swords: #4b5563;
+  --suit-pentacles: #6d7b2a;
+  --suit-major: #6b4fbb;
+
+  --card-w: 132px;
+  --card-h: 224px;
+
+  font-family: "Hiragino Sans", Inter, system-ui, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15131c;
+    --fg: #ece9f5;
+    --muted: #9a96a8;
+    --surface: #211e2b;
+    --border: #3a3647;
+    --accent: #a48cf0;
+    --reversed: #e07a6c;
+    --back-bg: #1f1840;
+    --back-line: #3d3172;
+    --paper: #f1ead8;
+  }
+}
+
+body { margin: 0; }
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+h1 { margin: 0 0 24px; letter-spacing: 0.08em; }
+
+.controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+select, button {
+  font: inherit;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.controls button { background: var(--accent); border-color: var(--accent); color: #fff; cursor: pointer; }
+.controls button.secondary { background: transparent; color: var(--accent); }
+.controls button[hidden] { display: none; }
+
+.error { color: var(--reversed); }
+
+/* ---- spread ---- */
+
+.reading {
+  margin: 32px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.reading-cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px 20px;
+}
+
+.card-index { display: none; }
+.reading-legend { display: none; }
+
+/* ---- Celtic cross ----
+ * 8 本の半カード行に配置する。十字は行 2〜7、杖 (7〜10) は行 1〜8。
+ *
+ *              [3]                 [10]
+ *        [5] [1 + 2] [6]           [9]
+ *              [4]                 [8]
+ *                                  [7]
+ */
+.reading[data-spread="celtic_cross"] {
+  --card-w: 84px;
+  --card-h: 143px;
+  --row-gap: 6px;
+}
+
+.reading[data-spread="celtic_cross"] .reading-cards {
+  display: grid;
+  grid-template-columns: repeat(3, var(--card-w)) 0 var(--card-w);
+  grid-template-rows: repeat(8, calc(var(--card-h) / 2));
+  /* 横向きの 2 枚目 (幅 = card-h) が隣のカードに重ならない間隔 */
+  column-gap: calc((var(--card-h) - var(--card-w)) / 2 + 10px);
+  row-gap: var(--row-gap);
+}
+
+.reading[data-spread="celtic_cross"] .card {
+  position: relative;
+  align-self: center;
+}
+
+.reading[data-spread="celtic_cross"] .card[data-position="0"] { grid-area: 4 / 2 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="1"] { grid-area: 4 / 2 / span 2; rotate: 90deg; z-index: 1; }
+.reading[data-spread="celtic_cross"] .card[data-position="2"] { grid-area: 2 / 2 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="3"] { grid-area: 6 / 2 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="4"] { grid-area: 4 / 1 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="5"] { grid-area: 4 / 3 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="6"] { grid-area: 7 / 5 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="7"] { grid-area: 5 / 5 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="8"] { grid-area: 3 / 5 / span 2; }
+.reading[data-spread="celtic_cross"] .card[data-position="9"] { grid-area: 1 / 5 / span 2; }
+
+.reading[data-spread="celtic_cross"] .card-position,
+.reading[data-spread="celtic_cross"] .card-orientation { display: none; }
+
+.reading[data-spread="celtic_cross"] .card-index {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.reading[data-spread="celtic_cross"] .card-face { padding: 8px 6px; }
+.reading[data-spread="celtic_cross"] .card-numeral { font-size: 0.8rem; }
+.reading[data-spread="celtic_cross"] .card-symbol { font-size: 2rem; }
+.reading[data-spread="celtic_cross"] .card-name { font-size: 0.62rem; }
+.reading[data-spread="celtic_cross"] .card-back-emblem { width: 36px; height: 36px; font-size: 1.1rem; }
+
+.reading[data-spread="celtic_cross"] .reading-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 260px;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: grid;
+  grid-template-columns: 22px 6.5em 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.legend-index {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.legend-position { color: var(--muted); }
+.legend-card { color: var(--muted); }
+.legend-item.revealed .legend-card { color: var(--fg); font-weight: 600; }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  perspective: 900px;
+  animation: deal 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--deal-index, 0) * 90ms);
+}
+
+@keyframes deal {
+  from { opacity: 0; transform: translateY(-24px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+.card-position { font-size: 0.8rem; color: var(--muted); }
+
+.card-orientation {
+  font-size: 0.85rem;
+  color: var(--accent);
+  visibility: hidden;
+}
+.card.flipped .card-orientation { visibility: visible; }
+.card.reversed .card-orientation { color: var(--reversed); }
+
+/* ---- the card itself (3D flip) ---- */
+
+.card-inner {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.4, 0.1, 0.2, 1);
+}
+.card-inner:hover { transform: translateY(-4px); }
+.card-inner:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+.card.flipped .card-inner { transform: rotateY(180deg); cursor: default; }
+
+.card-back,
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.18);
+  overflow: hidden;
+}
+
+.card-back {
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(45deg, var(--back-line) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(-45deg, var(--back-line) 0 1px, transparent 1px 12px),
+    var(--back-bg);
+  border: 3px solid var(--back-bg);
+  outline: 1px solid var(--gold);
+  outline-offset: -8px;
+}
+
+.card-back-emblem {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: var(--back-bg);
+  color: var(--gold);
+  font-size: 1.6rem;
+}
+
+.card-face {
+  --suit: var(--suit-major);
+  transform: rotateY(180deg);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  padding: 12px 10px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--gold);
+  outline: 1px solid color-mix(in srgb, var(--suit) 50%, transparent);
+  outline-offset: -6px;
+}
+.card.reversed .card-face { transform: rotateY(180deg) rotateZ(180deg); }
+
+.card[data-suit="Wands"] .card-face { --suit: var(--suit-wands); }
+.card[data-suit="Cups"] .card-face { --suit: var(--suit-cups); }
+.card[data-suit="Swords"] .card-face { --suit: var(--suit-swords); }
+.card[data-suit="Pentacles"] .card-face { --suit: var(--suit-pentacles); }
+
+.card-numeral {
+  font-family: "Times New Roman", "Hiragino Mincho ProN", serif;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--suit);
+}
+
+.card-symbol {
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--suit);
+}
+
+.card-name {
+  font-family: "Times New Roman", "Hiragino Mincho ProN", serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+  .card-inner { transition: none; }
+}
+
+/* ---- messages ---- */
+
+.warning { color: var(--muted); font-size: 0.9rem; }
+.reading-caption { margin: 16px 0 0; color: var(--muted); font-size: 0.9rem; }
+
+/* ---- history ---- */
+
+.history {
+  max-width: 640px;
+  margin: 48px auto 0;
+  text-align: left;
+}
+
+.history summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 8px 0;
+}
+.history-count { color: var(--muted); font-weight: 400; }
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-item {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.history-open {
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 12px;
+  border: none;
+  border-radius: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+.history-open:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+.history-date { color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.history-spread { font-weight: 600; font-size: 0.9rem; }
+.history-summary {
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-delete {
+  border: none;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0 14px;
+}
+.history-delete:hover { color: var(--reversed); }
+
+.history-empty { color: var(--muted); font-size: 0.9rem; padding: 8px 0; }
+
+.history-clear {
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+.history-clear[hidden] { display: none; }
+.history-clear.confirming { color: #fff; background: var(--reversed); border-color: var(--reversed); }
