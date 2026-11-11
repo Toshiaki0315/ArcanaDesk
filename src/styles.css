@@ -106,6 +106,7 @@ select, button {
 /* ---- spread ---- */
 
 .reading {
+  position: relative; /* 解説の吹き出し (.card-bubble) の配置の基準 */
   margin: 24px 0 0;
   display: flex;
   flex-wrap: wrap;
@@ -187,10 +188,9 @@ select, button {
   font-weight: 600;
 }
 
-.reading[data-spread="celtic_cross"] .card-face { padding: 8px 6px; }
-.reading[data-spread="celtic_cross"] .card-numeral { font-size: 0.8rem; }
+.reading[data-spread="celtic_cross"] .card-numeral { margin-top: 5px; padding: 0 6px; font-size: 0.7rem; }
 .reading[data-spread="celtic_cross"] .card-art { padding: 2px 4px; }
-.reading[data-spread="celtic_cross"] .card-name-ja { font-size: 0.7rem; }
+.reading[data-spread="celtic_cross"] .card-name-ja { padding: 3px 3px 4px; font-size: 0.62rem; }
 .reading[data-spread="celtic_cross"] .card-back-emblem { width: 36px; height: 36px; font-size: 1.1rem; }
 
 .reading[data-spread="celtic_cross"] .reading-legend {
@@ -281,7 +281,10 @@ select, button {
 .card-inner:hover { transform: translateY(-4px); }
 .card-inner:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
-.card.flipped .card-inner { transform: rotateY(180deg); cursor: default; }
+.card.flipped .card-inner { transform: rotateY(180deg); cursor: help; }
+.card.flipped .card-inner[aria-expanded="true"] .card-face {
+  box-shadow: 0 0 0 2px var(--gold), 0 0 18px rgb(212 175 90 / 0.45);
+}
 
 .card-back,
 .card-face {
@@ -322,11 +325,11 @@ select, button {
 .card-face {
   --suit: var(--suit-major);
   transform: rotateY(180deg);
-  display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  /* ドット絵を面いっぱいに敷き、番号と名前は上下の帯として重ねる */
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 12px 10px;
+  padding: 0;
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--gold);
@@ -340,18 +343,17 @@ select, button {
 .card[data-suit="Swords"] .card-face { --suit: var(--suit-swords); }
 .card[data-suit="Pentacles"] .card-face { --suit: var(--suit-pentacles); }
 
-.card-numeral {
-  font-size: 1rem;
-  letter-spacing: 0.08em;
-  color: var(--suit);
-}
-
+/*
+ * カードの絵は 2 段構え:
+ *   - 簡易版の SVG (.card-art) を、番号と名前の間に常に描く
+ *   - ドット絵 (.card-image、各自で用意) を読み込めたら、面いっぱいに重ねる (.has-image)
+ */
 .card-art {
   display: block;
+  flex: 1 1 auto;
   width: 100%;
-  height: 100%;
   min-height: 0;
-  padding: 4px 6px;
+  padding: 4px 8px;
   box-sizing: border-box;
   color: var(--suit);
   /* 金のアクセントは紙の上でも読めるよう濃いめにする */
@@ -362,8 +364,36 @@ select, button {
 .card-art .solid { fill: currentColor; stroke: none; }
 .card-art .accent { color: var(--art-accent); }
 
+.card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 拡大してもドットをにじませない */
+  image-rendering: pixelated;
+}
+
+.card-numeral {
+  position: relative;
+  z-index: 1; /* 重ねたドット絵 (position: absolute) より手前に出す */
+  margin-top: 8px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--suit);
+}
+
+.card-name-ja,
+.card-name {
+  position: relative;
+  align-self: stretch;
+}
+
 .card-name-ja {
-  font-size: 0.95rem;
+  padding: 2px 4px 0;
+  font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.25;
 }
@@ -371,10 +401,24 @@ select, button {
 .name-part { display: inline-block; }
 
 .card-name {
+  padding: 0 4px 6px;
   font-size: 0.68rem;
   line-height: 1.2;
   color: color-mix(in srgb, var(--ink) 65%, transparent);
 }
+
+/* ドット絵があるとき: 番号と名前を、暗くした絵になじむ暗い帯にする */
+.card-face.has-image .card-numeral {
+  background: rgb(14 11 24 / 0.82);
+  color: var(--gold);
+}
+.card-face.has-image .card-name-ja,
+.card-face.has-image .card-name {
+  background: rgb(14 11 24 / 0.84);
+  color: var(--fg);
+}
+.card-face.has-image .card-name-ja { margin-top: auto; padding-top: 4px; }
+.card-face.has-image .card-name { color: var(--muted); }
 
 .card-meaning {
   max-width: 180px;
@@ -388,7 +432,64 @@ select, button {
 }
 .card.flipped .card-meaning { visibility: visible; }
 
+/* ---- explanation bubble ---- */
+
+.card-bubble {
+  --arrow-offset: 0px;
+  position: absolute;
+  z-index: 10;
+  width: 300px;
+  box-sizing: border-box;
+  transform: translateX(-50%);
+  padding: 14px 16px;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  background: rgb(22 17 40 / 0.97);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.6), 0 0 20px rgb(212 175 90 / 0.15);
+  text-align: left;
+  animation: bubble-in 160ms ease-out;
+}
+.card-bubble.above { transform: translate(-50%, -100%); }
+
+/* カードを指す矢印 (吹き出しを左右に寄せたぶん --arrow-offset でずらす) */
+.card-bubble::before {
+  content: "";
+  position: absolute;
+  left: calc(50% + var(--arrow-offset) - 8px);
+  top: -8px;
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  border-left: 1px solid var(--gold);
+  border-top: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+.card-bubble.above::before {
+  top: auto;
+  bottom: -8px;
+  transform: rotate(225deg);
+}
+
+.card-bubble p { margin: 0; }
+.card-bubble .bubble-title { color: var(--gold); font-size: 1.05rem; -webkit-text-stroke: 0.4px currentColor; }
+.card-bubble .bubble-subtitle { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+.card-bubble .bubble-position {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--accent);
+}
+.card-bubble .bubble-meaning { margin-top: 8px; font-size: 0.95rem; line-height: 1.6; }
+.card-bubble .bubble-other { margin-top: 8px; font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+@keyframes bubble-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .card-bubble { animation: none; }
   body::before { animation: none; }
   .card { animation: none; }
   .card-inner { transition: none; }

@@ -1,0 +1,392 @@
+[
+ {
+  "id": 0,
+  "file": "RWS_Tarot_00_Fool.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg"
+ },
+ {
+  "id": 1,
+  "file": "RWS_Tarot_01_Magician.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg"
+ },
+ {
+  "id": 2,
+  "file": "RWS_Tarot_02_High_Priestess.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg"
+ },
+ {
+  "id": 3,
+  "file": "RWS_Tarot_03_Empress.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/RWS_Tarot_03_Empress.jpg"
+ },
+ {
+  "id": 4,
+  "file": "RWS_Tarot_04_Emperor.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg"
+ },
+ {
+  "id": 5,
+  "file": "RWS_Tarot_05_Hierophant.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg"
+ },
+ {
+  "id": 6,
+  "file": "RWS_Tarot_06_Lovers.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg"
+ },
+ {
+  "id": 7,
+  "file": "RWS_Tarot_07_Chariot.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg"
+ },
+ {
+  "id": 8,
+  "file": "RWS_Tarot_08_Strength.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg"
+ },
+ {
+  "id": 9,
+  "file": "RWS_Tarot_09_Hermit.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg"
+ },
+ {
+  "id": 10,
+  "file": "RWS_Tarot_10_Wheel_of_Fortune.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg"
+ },
+ {
+  "id": 11,
+  "file": "RWS_Tarot_11_Justice.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg"
+ },
+ {
+  "id": 12,
+  "file": "RWS_Tarot_12_Hanged_Man.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg"
+ },
+ {
+  "id": 13,
+  "file": "RWS_Tarot_13_Death.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg"
+ },
+ {
+  "id": 14,
+  "file": "RWS_Tarot_14_Temperance.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg"
+ },
+ {
+  "id": 15,
+  "file": "RWS_Tarot_15_Devil.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg"
+ },
+ {
+  "id": 16,
+  "file": "RWS_Tarot_16_Tower.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg"
+ },
+ {
+  "id": 17,
+  "file": "RWS_Tarot_17_Star.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg"
+ },
+ {
+  "id": 18,
+  "file": "RWS_Tarot_18_Moon.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg"
+ },
+ {
+  "id": 19,
+  "file": "RWS_Tarot_19_Sun.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg"
+ },
+ {
+  "id": 20,
+  "file": "RWS_Tarot_20_Judgement.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg"
+ },
+ {
+  "id": 21,
+  "file": "RWS_Tarot_21_World.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg"
+ },
+ {
+  "id": 22,
+  "file": "Wands01.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/11/Wands01.jpg"
+ },
+ {
+  "id": 23,
+  "file": "Wands02.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Wands02.jpg"
+ },
+ {
+  "id": 24,
+  "file": "Wands03.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Wands03.jpg"
+ },
+ {
+  "id": 25,
+  "file": "Wands04.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Wands04.jpg"
+ },
+ {
+  "id": 26,
+  "file": "Wands05.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Wands05.jpg"
+ },
+ {
+  "id": 27,
+  "file": "Wands06.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Wands06.jpg"
+ },
+ {
+  "id": 28,
+  "file": "Wands07.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Wands07.jpg"
+ },
+ {
+  "id": 29,
+  "file": "Wands08.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Wands08.jpg"
+ },
+ {
+  "id": 30,
+  "file": "Wands09.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Wands09.jpg"
+ },
+ {
+  "id": 31,
+  "file": "Wands10.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Wands10.jpg"
+ },
+ {
+  "id": 32,
+  "file": "Wands11.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Wands11.jpg"
+ },
+ {
+  "id": 33,
+  "file": "Wands12.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/16/Wands12.jpg"
+ },
+ {
+  "id": 34,
+  "file": "Wands13.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Wands13.jpg"
+ },
+ {
+  "id": 35,
+  "file": "Wands14.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Wands14.jpg"
+ },
+ {
+  "id": 36,
+  "file": "Cups01.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Cups01.jpg"
+ },
+ {
+  "id": 37,
+  "file": "Cups02.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Cups02.jpg"
+ },
+ {
+  "id": 38,
+  "file": "Cups03.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Cups03.jpg"
+ },
+ {
+  "id": 39,
+  "file": "Cups04.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Cups04.jpg"
+ },
+ {
+  "id": 40,
+  "file": "Cups05.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Cups05.jpg"
+ },
+ {
+  "id": 41,
+  "file": "Cups06.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/17/Cups06.jpg"
+ },
+ {
+  "id": 42,
+  "file": "Cups07.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Cups07.jpg"
+ },
+ {
+  "id": 43,
+  "file": "Cups08.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Cups08.jpg"
+ },
+ {
+  "id": 44,
+  "file": "Cups09.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/24/Cups09.jpg"
+ },
+ {
+  "id": 45,
+  "file": "Cups10.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/8/84/Cups10.jpg"
+ },
+ {
+  "id": 46,
+  "file": "Cups11.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Cups11.jpg"
+ },
+ {
+  "id": 47,
+  "file": "Cups12.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Cups12.jpg"
+ },
+ {
+  "id": 48,
+  "file": "Cups13.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/6/62/Cups13.jpg"
+ },
+ {
+  "id": 49,
+  "file": "Cups14.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/0/04/Cups14.jpg"
+ },
+ {
+  "id": 50,
+  "file": "Swords01.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Swords01.jpg"
+ },
+ {
+  "id": 51,
+  "file": "Swords02.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Swords02.jpg"
+ },
+ {
+  "id": 52,
+  "file": "Swords03.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/0/02/Swords03.jpg"
+ },
+ {
+  "id": 53,
+  "file": "Swords04.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Swords04.jpg"
+ },
+ {
+  "id": 54,
+  "file": "Swords05.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Swords05.jpg"
+ },
+ {
+  "id": 55,
+  "file": "Swords06.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/29/Swords06.jpg"
+ },
+ {
+  "id": 56,
+  "file": "Swords07.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/34/Swords07.jpg"
+ },
+ {
+  "id": 57,
+  "file": "Swords08.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Swords08.jpg"
+ },
+ {
+  "id": 58,
+  "file": "Swords09.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Swords09.jpg"
+ },
+ {
+  "id": 59,
+  "file": "Swords10.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Swords10.jpg"
+ },
+ {
+  "id": 60,
+  "file": "Swords11.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Swords11.jpg"
+ },
+ {
+  "id": 61,
+  "file": "Swords12.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Swords12.jpg"
+ },
+ {
+  "id": 62,
+  "file": "Swords13.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Swords13.jpg"
+ },
+ {
+  "id": 63,
+  "file": "Swords14.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Swords14.jpg"
+ },
+ {
+  "id": 64,
+  "file": "Pents01.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Pents01.jpg"
+ },
+ {
+  "id": 65,
+  "file": "Pents02.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Pents02.jpg"
+ },
+ {
+  "id": 66,
+  "file": "Pents03.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/42/Pents03.jpg"
+ },
+ {
+  "id": 67,
+  "file": "Pents04.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Pents04.jpg"
+ },
+ {
+  "id": 68,
+  "file": "Pents05.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/9/96/Pents05.jpg"
+ },
+ {
+  "id": 69,
+  "file": "Pents06.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Pents06.jpg"
+ },
+ {
+  "id": 70,
+  "file": "Pents07.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Pents07.jpg"
+ },
+ {
+  "id": 71,
+  "file": "Pents08.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/49/Pents08.jpg"
+ },
+ {
+  "id": 72,
+  "file": "Pents09.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Pents09.jpg"
+ },
+ {
+  "id": 73,
+  "file": "Pents10.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/4/42/Pents10.jpg"
+ },
+ {
+  "id": 74,
+  "file": "Pents11.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Pents11.jpg"
+ },
+ {
+  "id": 75,
+  "file": "Pents12.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Pents12.jpg"
+ },
+ {
+  "id": 76,
+  "file": "Pents13.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/8/88/Pents13.jpg"
+ },
+ {
+  "id": 77,
+  "file": "Pents14.jpg",
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Pents14.jpg"
+ }
+]
