@@ -189,7 +189,7 @@ select, button {
 
 .reading[data-spread="celtic_cross"] .card-face { padding: 8px 6px; }
 .reading[data-spread="celtic_cross"] .card-numeral { font-size: 0.8rem; }
-.reading[data-spread="celtic_cross"] .card-symbol { font-size: 2rem; }
+.reading[data-spread="celtic_cross"] .card-art { padding: 2px 4px; }
 .reading[data-spread="celtic_cross"] .card-name-ja { font-size: 0.7rem; }
 .reading[data-spread="celtic_cross"] .card-back-emblem { width: 36px; height: 36px; font-size: 1.1rem; }
 
@@ -346,11 +346,21 @@ select, button {
   color: var(--suit);
 }
 
-.card-symbol {
-  font-size: 3.2rem;
-  line-height: 1;
+.card-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 4px 6px;
+  box-sizing: border-box;
   color: var(--suit);
+  /* 金のアクセントは紙の上でも読めるよう濃いめにする */
+  --art-accent: #a8822c;
 }
+.card-art svg { display: block; width: 100%; height: 100%; }
+.card-art .fill { fill: currentColor; fill-opacity: 0.16; }
+.card-art .solid { fill: currentColor; stroke: none; }
+.card-art .accent { color: var(--art-accent); }
 
 .card-name-ja {
   font-size: 0.95rem;

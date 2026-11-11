@@ -1,4 +1,4 @@
-import type { Card, Suit } from "./api";
+import type { Card } from "./api";
 
 const ROMAN: [number, string][] = [
   [10, "X"],
@@ -28,16 +28,4 @@ const MINOR_RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "P", "Kn
 export function cardNumeral(card: Card): string {
   if (card.suit === "MajorArcana") return toRoman(card.id);
   return MINOR_RANKS[(card.id - MAJOR_COUNT) % MINOR_RANKS.length];
-}
-
-const SUIT_SYMBOLS: Record<Suit, string> = {
-  Wands: "♣",
-  Cups: "♥",
-  Swords: "♠",
-  Pentacles: "♦",
-  MajorArcana: "★",
-};
-
-export function suitSymbol(suit: Suit): string {
-  return SUIT_SYMBOLS[suit];
 }

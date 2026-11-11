@@ -1,5 +1,6 @@
-import { orientationLabel, type DrawnCard, type Reading } from "./api";
-import { cardNumeral, suitSymbol } from "./card";
+import { orientationLabel, type Card, type DrawnCard, type Reading } from "./api";
+import { cardArt } from "./art";
+import { cardNumeral } from "./card";
 import { cardNameJa, currentMeaning } from "./meanings";
 
 function el(tag: string, className: string, text?: string): HTMLElement {
@@ -20,12 +21,19 @@ function el(tag: string, className: string, text?: string): HTMLElement {
  *   <span class="card-position">過去</span>
  *   <button class="card-inner">            ← 3D 回転する本体
  *     <div class="card-back">…</div>
- *     <div class="card-face">番号 / シンボル / 日本語名 / 英語名</div>
+ *     <div class="card-face">番号 / 絵 / 日本語名 / 英語名</div>
  *   </button>
  *   <span class="card-orientation">正位置</span>
  *   <span class="card-meaning">向きに応じた意味</span>
  * </li>
  */
+/** カードの絵。art.ts が返す固定の SVG なので innerHTML で入れてよい。 */
+function renderArt(card: Card): HTMLElement {
+  const wrapper = el("span", "card-art");
+  wrapper.innerHTML = cardArt(card);
+  return wrapper;
+}
+
 /** 「カップの」「エース」のように「の」の後ろで区切り、まとまりごとに折り返せるようにする。 */
 function renderNameJa(name: string): HTMLElement {
   const wrapper = el("span", "card-name-ja");
@@ -48,7 +56,7 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   const face = el("div", "card-face");
   face.append(
     el("span", "card-numeral", cardNumeral(card)),
-    el("span", "card-symbol", suitSymbol(card.suit)),
+    renderArt(card),
     renderNameJa(cardNameJa(card)),
     el("span", "card-name", card.name),
   );
