@@ -1,5 +1,6 @@
 import { orientationLabel, type DrawnCard, type Reading } from "./api";
 import { cardNumeral, suitSymbol } from "./card";
+import { cardNameJa, currentMeaning } from "./meanings";
 
 function el(tag: string, className: string, text?: string): HTMLElement {
   const e = document.createElement(tag);
@@ -19,11 +20,20 @@ function el(tag: string, className: string, text?: string): HTMLElement {
  *   <span class="card-position">過去</span>
  *   <button class="card-inner">            ← 3D 回転する本体
  *     <div class="card-back">…</div>
- *     <div class="card-face">番号 / シンボル / 名前</div>
+ *     <div class="card-face">番号 / シンボル / 日本語名 / 英語名</div>
  *   </button>
  *   <span class="card-orientation">正位置</span>
+ *   <span class="card-meaning">向きに応じた意味</span>
  * </li>
  */
+/** 「カップの」「エース」のように「の」の後ろで区切り、まとまりごとに折り返せるようにする。 */
+function renderNameJa(name: string): HTMLElement {
+  const wrapper = el("span", "card-name-ja");
+  const parts = name.split(/(?<=の)/);
+  wrapper.append(...parts.map((part) => el("span", "name-part", part)));
+  return wrapper;
+}
+
 function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   const { position_name, card } = drawn;
   const li = el("li", card.is_reversed ? "card reversed" : "card");
@@ -39,6 +49,7 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   face.append(
     el("span", "card-numeral", cardNumeral(card)),
     el("span", "card-symbol", suitSymbol(card.suit)),
+    renderNameJa(cardNameJa(card)),
     el("span", "card-name", card.name),
   );
 
@@ -53,6 +64,7 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
     el("span", "card-position", position_name),
     inner,
     el("span", "card-orientation", orientationLabel(card)),
+    el("span", "card-meaning", currentMeaning(card)),
   );
   return li;
 }
@@ -64,6 +76,7 @@ function renderLegendItem({ position, position_name }: DrawnCard): HTMLElement {
     el("span", "legend-index", String(position + 1)),
     el("span", "legend-position", position_name),
     el("span", "legend-card", "？"),
+    el("span", "legend-meaning", ""),
   );
   return li;
 }
@@ -83,7 +96,7 @@ export function revealCard(cardEl: HTMLElement): void {
   if (cardEl.classList.contains("flipped")) return;
   cardEl.classList.add("flipped");
   const position = cardEl.querySelector(".card-position")?.textContent;
-  const name = cardEl.querySelector(".card-name")?.textContent;
+  const name = cardEl.querySelector(".card-name-ja")?.textContent;
   const orientation = cardEl.querySelector(".card-orientation")?.textContent;
   cardEl
     .querySelector(".card-inner")
@@ -95,6 +108,8 @@ export function revealCard(cardEl: HTMLElement): void {
   if (legendItem) {
     legendItem.classList.add("revealed");
     legendItem.querySelector(".legend-card")!.textContent = `${name}（${orientation}）`;
+    legendItem.querySelector(".legend-meaning")!.textContent =
+      cardEl.querySelector(".card-meaning")!.textContent;
   }
 }
 

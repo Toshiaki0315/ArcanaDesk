@@ -133,7 +133,9 @@ select, button {
 .reading[data-spread="celtic_cross"] .card[data-position="9"] { grid-area: 1 / 5 / span 2; }
 
 .reading[data-spread="celtic_cross"] .card-position,
-.reading[data-spread="celtic_cross"] .card-orientation { display: none; }
+.reading[data-spread="celtic_cross"] .card-orientation,
+.reading[data-spread="celtic_cross"] .card-meaning,
+.reading[data-spread="celtic_cross"] .card-name { display: none; }
 
 .reading[data-spread="celtic_cross"] .card-index {
   display: grid;
@@ -154,7 +156,7 @@ select, button {
 .reading[data-spread="celtic_cross"] .card-face { padding: 8px 6px; }
 .reading[data-spread="celtic_cross"] .card-numeral { font-size: 0.8rem; }
 .reading[data-spread="celtic_cross"] .card-symbol { font-size: 2rem; }
-.reading[data-spread="celtic_cross"] .card-name { font-size: 0.62rem; }
+.reading[data-spread="celtic_cross"] .card-name-ja { font-size: 0.7rem; }
 .reading[data-spread="celtic_cross"] .card-back-emblem { width: 36px; height: 36px; font-size: 1.1rem; }
 
 .reading[data-spread="celtic_cross"] .reading-legend {
@@ -164,7 +166,7 @@ select, button {
   list-style: none;
   padding: 0;
   margin: 0;
-  min-width: 260px;
+  width: 360px;
   text-align: left;
   font-size: 0.85rem;
 }
@@ -173,8 +175,8 @@ select, button {
   display: grid;
   grid-template-columns: 22px 6.5em 1fr;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: 2px 8px;
+  padding: 5px 10px;
   border-radius: 8px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -193,6 +195,15 @@ select, button {
 .legend-position { color: var(--muted); }
 .legend-card { color: var(--muted); }
 .legend-item.revealed .legend-card { color: var(--fg); font-weight: 600; }
+.legend-meaning {
+  grid-column: 2 / -1;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.legend-meaning:empty { display: none; }
 
 .card {
   display: flex;
@@ -277,8 +288,9 @@ select, button {
   --suit: var(--suit-major);
   transform: rotateY(180deg);
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto;
   align-items: center;
+  gap: 2px;
   padding: 12px 10px;
   background: var(--paper);
   color: var(--ink);
@@ -306,12 +318,33 @@ select, button {
   color: var(--suit);
 }
 
-.card-name {
-  font-family: "Times New Roman", "Hiragino Mincho ProN", serif;
-  font-size: 0.85rem;
+.card-name-ja {
+  font-family: "Hiragino Mincho ProN", serif;
+  font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.25;
 }
+
+.name-part { display: inline-block; }
+
+.card-name {
+  font-family: "Times New Roman", serif;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  color: color-mix(in srgb, var(--ink) 65%, transparent);
+}
+
+.card-meaning {
+  max-width: 180px;
+  /* 「、」区切りのキーワードを途中で折り返さない */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--fg);
+  visibility: hidden;
+}
+.card.flipped .card-meaning { visibility: visible; }
 
 @media (prefers-reduced-motion: reduce) {
   .card { animation: none; }

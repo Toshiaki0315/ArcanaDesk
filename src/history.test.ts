@@ -39,8 +39,8 @@ describe("formatDate", () => {
 });
 
 describe("summarizeEntry", () => {
-  it("lists card names, marking reversed cards with （逆）", () => {
-    expect(summarizeEntry(entries[0])).toBe("The Fool / Ace of Cups（逆） / The World");
+  it("lists Japanese card names, marking reversed cards with （逆）", () => {
+    expect(summarizeEntry(entries[0])).toBe("愚者 / カップのエース（逆） / 世界");
   });
 
   it("abbreviates long spreads after three cards", () => {
@@ -56,7 +56,7 @@ describe("summarizeEntry", () => {
         })),
       },
     };
-    expect(summarizeEntry(celtic)).toBe("C0 / C1 / C2 ほか7枚");
+    expect(summarizeEntry(celtic)).toBe("愚者 / 魔術師 / 女教皇 ほか7枚");
   });
 });
 
@@ -75,7 +75,7 @@ describe("renderHistory", () => {
     expect(items[0].querySelector(".history-date")?.textContent).toBe("2026/11/11 09:05");
     expect(items[0].querySelector(".history-spread")?.textContent).toBe("スリーカード");
     expect(items[0].querySelector(".history-summary")?.textContent).toBe(
-      "The Fool / Ace of Cups（逆） / The World",
+      "愚者 / カップのエース（逆） / 世界",
     );
     expect(items[1].querySelector(".history-spread")?.textContent).toBe("ワンオラクル");
   });
