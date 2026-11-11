@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderReading, revealAll, revealCard } from "./render";
 import type { Reading } from "./api";
+import { cardMeaning } from "./meanings";
 
 const reading: Reading = {
   spread: "three_card",
@@ -75,6 +76,33 @@ describe("renderReading", () => {
     expect(cards[2].style.getPropertyValue("--deal-index")).toBe("2");
   });
 
+  it("shows the Japanese name and the English name on the face", () => {
+    renderReading(container, reading);
+    const second = container.querySelectorAll(".card")[1];
+    expect(second.querySelector(".card-name-ja")?.textContent).toBe("カップのエース");
+    expect(second.querySelector(".card-name")?.textContent).toBe("Ace of Cups");
+  });
+
+  it("splits Japanese names after の so they wrap at natural points", () => {
+    renderReading(container, reading);
+    const [first, second] = container.querySelectorAll(".card");
+    const parts = (c: Element) =>
+      [...c.querySelectorAll(".card-name-ja > .name-part")].map((e) => e.textContent);
+    expect(parts(second)).toEqual(["カップの", "エース"]);
+    expect(parts(first)).toEqual(["愚者"]);
+  });
+
+  it("shows the meaning for each card's orientation", () => {
+    renderReading(container, reading);
+    const [first, second] = container.querySelectorAll(".card");
+    expect(first.querySelector(".card-meaning")?.textContent).toBe(
+      cardMeaning(reading.cards[0].card).upright,
+    );
+    expect(second.querySelector(".card-meaning")?.textContent).toBe(
+      cardMeaning(reading.cards[1].card).reversed,
+    );
+  });
+
   it("shows numeral and suit symbol on the face", () => {
     renderReading(container, reading);
     const second = container.querySelectorAll(".card")[1];
@@ -105,7 +133,7 @@ describe("revealing cards", () => {
     const second = container.querySelectorAll<HTMLElement>(".card")[1];
     revealCard(second);
     expect(second.querySelector(".card-inner")?.getAttribute("aria-label")).toBe(
-      "現在: Ace of Cups（逆位置）",
+      "現在: カップのエース（逆位置）",
     );
   });
 
@@ -147,11 +175,16 @@ describe("legend", () => {
     ]);
   });
 
-  it("hides card names until revealed", () => {
+  it("hides card names and meanings until revealed", () => {
     expect(items().map((li) => li.querySelector(".legend-card")?.textContent)).toEqual([
       "？",
       "？",
       "？",
+    ]);
+    expect(items().map((li) => li.querySelector(".legend-meaning")?.textContent)).toEqual([
+      "",
+      "",
+      "",
     ]);
   });
 
@@ -159,7 +192,10 @@ describe("legend", () => {
     revealCard(container.querySelectorAll<HTMLElement>(".card")[1]);
     const [first, second] = items();
     expect(first.querySelector(".legend-card")?.textContent).toBe("？");
-    expect(second.querySelector(".legend-card")?.textContent).toBe("Ace of Cups（逆位置）");
+    expect(second.querySelector(".legend-card")?.textContent).toBe("カップのエース（逆位置）");
+    expect(second.querySelector(".legend-meaning")?.textContent).toBe(
+      cardMeaning(reading.cards[1].card).reversed,
+    );
     expect(second.classList.contains("revealed")).toBe(true);
   });
 

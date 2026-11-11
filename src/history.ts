@@ -1,4 +1,5 @@
 import { spreadLabel, type HistoryEntry } from "./api";
+import { cardNameJa } from "./meanings";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -16,7 +17,7 @@ const SUMMARY_LIMIT = 3;
 /** 一覧に表示する 1 行要約。4 枚以上は先頭 3 枚 + 残り枚数。 */
 export function summarizeEntry(entry: HistoryEntry): string {
   const names = entry.reading.cards.map(
-    ({ card }) => card.name + (card.is_reversed ? "（逆）" : ""),
+    ({ card }) => cardNameJa(card) + (card.is_reversed ? "（逆）" : ""),
   );
   const head = names.slice(0, SUMMARY_LIMIT).join(" / ");
   const rest = names.length - SUMMARY_LIMIT;

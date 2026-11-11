@@ -33,6 +33,7 @@ pnpm coverage                  # TypeScript カバレッジ
 - `src-tauri/src/history.rs` — 占い履歴の JSON 保存 (一時ファイル経由の書き込み、壊れたファイルは上書きしない)
 - `src/api.ts` — Rust と共通の型定義と `drawReading()` (invoke ラッパー)
 - `src/card.ts` — カード表面の番号 (ローマ数字 / ランク) とスートシンボル
+- `src/meanings.ts` — 78枚の日本語名と正位置・逆位置の意味 (カード id で引く)
 - `src/render.ts` — カードと凡例の描画 (裏向きで配り、クリック / すべてめくるで表に返す)
 - `src/styles.css` — カードデザインとスプレッド配置 (ケルト十字は CSS Grid で十字 + 杖に配置)
 - `src/history.ts` — 履歴一覧の描画、日時の整形、二度押し確認ボタン
