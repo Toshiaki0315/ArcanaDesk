@@ -252,7 +252,9 @@ mod tests {
     #[test]
     fn test_error_messages_are_japanese() {
         let io = HistoryError::Io(std::io::Error::other("boom"));
-        assert!(io.to_string().starts_with("履歴ファイルの読み書きに失敗しました"));
+        assert!(io
+            .to_string()
+            .starts_with("履歴ファイルの読み書きに失敗しました"));
         let bad = HistoryError::Corrupted(serde_json::from_str::<u8>("x").unwrap_err());
         assert!(bad.to_string().starts_with("履歴ファイルが壊れています"));
     }

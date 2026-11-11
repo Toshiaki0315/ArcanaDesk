@@ -130,8 +130,11 @@ mod tests {
         }
 
         fn draw(&self, spread: &str) -> DrawResult {
-            serde_json::from_value(self.invoke("draw_reading", json!({ "spread": spread })).unwrap())
-                .unwrap()
+            serde_json::from_value(
+                self.invoke("draw_reading", json!({ "spread": spread }))
+                    .unwrap(),
+            )
+            .unwrap()
         }
 
         fn history(&self) -> Vec<HistoryEntry> {
@@ -197,8 +200,13 @@ mod tests {
 
     #[test]
     fn test_invoke_without_spread_is_an_error() {
-        let err = Harness::new().invoke("draw_reading", json!({})).unwrap_err();
-        assert!(err.to_string().contains("missing required key spread"), "{err}");
+        let err = Harness::new()
+            .invoke("draw_reading", json!({}))
+            .unwrap_err();
+        assert!(
+            err.to_string().contains("missing required key spread"),
+            "{err}"
+        );
     }
 
     #[test]
@@ -232,7 +240,10 @@ mod tests {
         std::fs::write(dir.path().join("history.json"), "broken").unwrap();
         let h = Harness::with_history_path(dir, |d| d.path().join("history.json"));
         let err = h.invoke("list_history", json!({})).unwrap_err();
-        assert!(err.to_string().contains("履歴ファイルが壊れています"), "{err}");
+        assert!(
+            err.to_string().contains("履歴ファイルが壊れています"),
+            "{err}"
+        );
     }
 
     #[test]
@@ -242,8 +253,14 @@ mod tests {
         h.draw("one_oracle");
         let target = h.history()[0].id;
 
-        assert_eq!(h.invoke("delete_history", json!({ "id": target })).unwrap(), json!(true));
-        assert_eq!(h.invoke("delete_history", json!({ "id": target })).unwrap(), json!(false));
+        assert_eq!(
+            h.invoke("delete_history", json!({ "id": target })).unwrap(),
+            json!(true)
+        );
+        assert_eq!(
+            h.invoke("delete_history", json!({ "id": target })).unwrap(),
+            json!(false)
+        );
         let remaining = h.history();
         assert_eq!(remaining.len(), 1);
         assert_ne!(remaining[0].id, target);

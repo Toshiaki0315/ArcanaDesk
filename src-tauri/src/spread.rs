@@ -135,7 +135,10 @@ mod tests {
         let r = perform_reading_with_rng(SpreadType::CelticCross, &mut StdRng::seed_from_u64(2));
         for (i, dc) in r.cards.iter().enumerate() {
             assert_eq!(dc.position, i);
-            assert_eq!(dc.position_name, SpreadType::CelticCross.position_names()[i]);
+            assert_eq!(
+                dc.position_name,
+                SpreadType::CelticCross.position_names()[i]
+            );
         }
     }
 
@@ -154,9 +157,17 @@ mod tests {
         // シャッフルしなければ常に The Fool (id 0) から始まってしまう
         let mut rng = StdRng::seed_from_u64(4);
         let firsts: HashSet<u8> = (0..50)
-            .map(|_| perform_reading_with_rng(SpreadType::OneOracle, &mut rng).cards[0].card.id)
+            .map(|_| {
+                perform_reading_with_rng(SpreadType::OneOracle, &mut rng).cards[0]
+                    .card
+                    .id
+            })
             .collect();
-        assert!(firsts.len() > 10, "only {} distinct first cards", firsts.len());
+        assert!(
+            firsts.len() > 10,
+            "only {} distinct first cards",
+            firsts.len()
+        );
     }
 
     #[test]
