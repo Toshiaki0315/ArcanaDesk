@@ -27,3 +27,12 @@ src-tauri/gen/
 coverage/
 src-tauri/tarpaulin-report.html
 src-tauri/lcov.info
+
+# Python
+__pycache__/
+
+# カードのドット絵 (各自で用意する。手順は README の「カードの絵」を参照)
+/public/cards/
+
+# カードの原画 (make cards で取得。git 管理外)
+/.cards-src/

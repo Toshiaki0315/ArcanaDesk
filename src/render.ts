@@ -1,5 +1,7 @@
 import { orientationLabel, type Card, type DrawnCard, type Reading } from "./api";
 import { cardArt } from "./art";
+import { attachCard, toggleBubble, wireBubble } from "./bubble";
+import { cardImageUrl } from "./card-image";
 import { cardNumeral } from "./card";
 import { cardNameJa, currentMeaning } from "./meanings";
 
@@ -21,17 +23,28 @@ function el(tag: string, className: string, text?: string): HTMLElement {
  *   <span class="card-position">過去</span>
  *   <button class="card-inner">            ← 3D 回転する本体
  *     <div class="card-back">…</div>
- *     <div class="card-face">番号 / 絵 / 日本語名 / 英語名</div>
+ *     <div class="card-face [has-image | no-image]">
+ *       番号 / 簡易版の絵 (SVG) / ドット絵 (読み込めたら SVG の上に重なる) / 日本語名 / 英語名
+ *     </div>
  *   </button>
  *   <span class="card-orientation">正位置</span>
  *   <span class="card-meaning">向きに応じた意味</span>
  * </li>
  */
-/** カードの絵。art.ts が返す固定の SVG なので innerHTML で入れてよい。 */
+/** 簡易版の絵。art.ts が返す固定の SVG なので innerHTML で入れてよい。 */
 function renderArt(card: Card): HTMLElement {
   const wrapper = el("span", "card-art");
   wrapper.innerHTML = cardArt(card);
   return wrapper;
+}
+
+/** カードのドット絵。名前は文字で表示するので画像は装飾扱い (alt="")。 */
+function renderImage(card: Card): HTMLElement {
+  const img = el("img", "card-image") as HTMLImageElement;
+  img.src = cardImageUrl(card);
+  img.alt = "";
+  img.decoding = "async";
+  return img;
 }
 
 /** 「カップの」「エース」のように「の」の後ろで区切り、まとまりごとに折り返せるようにする。 */
@@ -54,9 +67,18 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   back.append(el("span", "card-back-emblem", "✶"));
 
   const face = el("div", "card-face");
+  const image = renderImage(card);
+  // ドット絵は各自で用意するもの (git 管理外)。
+  // 読み込めたら SVG の上に重ねて表示し、無ければ外して SVG の簡易版を見せる。
+  image.addEventListener("load", () => face.classList.add("has-image"));
+  image.addEventListener("error", () => {
+    face.classList.add("no-image");
+    image.remove();
+  });
   face.append(
     el("span", "card-numeral", cardNumeral(card)),
     renderArt(card),
+    image,
     renderNameJa(cardNameJa(card)),
     el("span", "card-name", card.name),
   );
@@ -65,7 +87,15 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   inner.type = "button";
   inner.setAttribute("aria-label", `${position_name}のカードをめくる`);
   inner.append(back, face);
-  inner.addEventListener("click", () => revealCard(li));
+  // 裏向きならめくる。表向きなら解説の吹き出しを開閉する
+  inner.addEventListener("click", () => {
+    if (li.classList.contains("flipped")) {
+      toggleBubble(li.closest<HTMLElement>("[data-spread]")!, li);
+    } else {
+      revealCard(li);
+    }
+  });
+  attachCard(li, drawn);
 
   li.append(
     el("span", "card-index", String(drawn.position + 1)),
@@ -97,12 +127,14 @@ export function renderReading(container: HTMLElement, reading: Reading): void {
   const legend = el("ol", "reading-legend");
   legend.append(...reading.cards.map(renderLegendItem));
   container.replaceChildren(cards, legend);
+  wireBubble(container);
 }
 
 /** カードを表向きにする (一方向。再度呼んでも裏には戻らない)。 */
 export function revealCard(cardEl: HTMLElement): void {
   if (cardEl.classList.contains("flipped")) return;
   cardEl.classList.add("flipped");
+  cardEl.querySelector(".card-inner")?.setAttribute("aria-expanded", "false");
   const position = cardEl.querySelector(".card-position")?.textContent;
   const name = cardEl.querySelector(".card-name-ja")?.textContent;
   const orientation = cardEl.querySelector(".card-orientation")?.textContent;
