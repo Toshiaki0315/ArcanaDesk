@@ -54,6 +54,11 @@ export function drawReading(spread: SpreadType): Promise<DrawResult> {
   return invoke<DrawResult>("draw_reading", { spread });
 }
 
+/** カードのドット絵 78 枚分 (data URL、無い札は null)。起動時に 1 回呼ぶ。 */
+export function loadCardImages(): Promise<(string | null)[]> {
+  return invoke<(string | null)[]>("card_images");
+}
+
 /** 履歴を新しい順に取得する。 */
 export function listHistory(): Promise<HistoryEntry[]> {
   return invoke<HistoryEntry[]>("list_history");

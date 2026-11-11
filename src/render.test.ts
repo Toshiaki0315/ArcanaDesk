@@ -3,6 +3,7 @@ import { renderReading, revealAll, revealCard } from "./render";
 import type { Reading } from "./api";
 import { cardMeaning } from "./meanings";
 import { positionDescription } from "./positions";
+import { setCardImages } from "./card-image";
 
 const reading: Reading = {
   spread: "three_card",
@@ -104,42 +105,61 @@ describe("renderReading", () => {
     );
   });
 
-  it("prepares both the pixel-art image and the simple SVG picture on the face", () => {
-    renderReading(container, reading);
-    const [first, second] = container.querySelectorAll(".card");
-    const img = second.querySelector<HTMLImageElement>(".card-face img.card-image");
-    expect(img?.getAttribute("src")).toBe("/cards/36.png");
-    // 名前は文字で表示しているので、画像は装飾扱い
-    expect(img?.getAttribute("alt")).toBe("");
-    expect(first.querySelector(".card-face img.card-image")?.getAttribute("src")).toBe(
-      "/cards/00.png",
-    );
-    // 画像が用意されていないときに見せる簡易版 (SVG)
-    const art = second.querySelector(".card-face .card-art > svg");
-    expect(art?.getAttribute("data-suit")).toBe("Cups");
-    expect(art?.querySelectorAll(".pip")).toHaveLength(1);
-    expect(first.querySelector(".card-face .card-art > svg")?.getAttribute("data-major")).toBe("0");
-  });
+  describe("card pictures", () => {
+    const PNG = (n: string) => `data:image/png;base64,${n}`;
+    const withImages = (entries: Record<number, string>) =>
+      setCardImages(Array.from({ length: 78 }, (_, id) => entries[id] ?? null));
 
-  it("falls back to the simple SVG picture when the image is missing", () => {
-    renderReading(container, reading);
-    const face = container.querySelectorAll(".card")[1].querySelector<HTMLElement>(".card-face")!;
-    face.querySelector("img")!.dispatchEvent(new Event("error"));
-    expect(face.classList.contains("no-image")).toBe(true);
-    expect(face.querySelector("img")).toBeNull();
-    expect(face.querySelector(".card-art > svg")).not.toBeNull();
-    // 番号と名前は残る
-    expect(face.querySelector(".card-numeral")?.textContent).toBe("A");
-    expect(face.querySelector(".card-name-ja")?.textContent).toBe("カップのエース");
-  });
+    afterEach(() => setCardImages([]));
 
-  it("uses the image when it loads", () => {
-    renderReading(container, reading);
-    const face = container.querySelector<HTMLElement>(".card-face")!;
-    face.querySelector("img")!.dispatchEvent(new Event("load"));
-    expect(face.classList.contains("no-image")).toBe(false);
-    expect(face.classList.contains("has-image")).toBe(true);
-    expect(face.querySelector("img.card-image")).not.toBeNull();
+    it("shows only the simple SVG picture when no image was loaded at startup", () => {
+      renderReading(container, reading);
+      const faces = container.querySelectorAll<HTMLElement>(".card-face");
+      faces.forEach((face) => {
+        expect(face.querySelector("img")).toBeNull();
+        expect(face.classList.contains("no-image")).toBe(true);
+      });
+      const art = faces[1].querySelector(".card-art > svg");
+      expect(art?.getAttribute("data-suit")).toBe("Cups");
+      expect(art?.querySelectorAll(".pip")).toHaveLength(1);
+      expect(faces[0].querySelector(".card-art > svg")?.getAttribute("data-major")).toBe("0");
+    });
+
+    it("layers the loaded image over the SVG picture for cards that have one", () => {
+      withImages({ 36: PNG("CUPS") });
+      renderReading(container, reading);
+      const [first, second] = container.querySelectorAll<HTMLElement>(".card-face");
+      const img = second.querySelector<HTMLImageElement>("img.card-image");
+      expect(img?.getAttribute("src")).toBe(PNG("CUPS"));
+      // 名前は文字で表示しているので、画像は装飾扱い
+      expect(img?.getAttribute("alt")).toBe("");
+      expect(second.querySelector(".card-art > svg")).not.toBeNull();
+      // 画像の無い札は SVG だけ
+      expect(first.querySelector("img")).toBeNull();
+      expect(first.classList.contains("no-image")).toBe(true);
+    });
+
+    it("uses the image once it loads", () => {
+      withImages({ 0: PNG("FOOL") });
+      renderReading(container, reading);
+      const face = container.querySelector<HTMLElement>(".card-face")!;
+      face.querySelector("img")!.dispatchEvent(new Event("load"));
+      expect(face.classList.contains("has-image")).toBe(true);
+      expect(face.classList.contains("no-image")).toBe(false);
+    });
+
+    it("falls back to the SVG picture if a loaded image cannot be shown", () => {
+      withImages({ 36: PNG("BROKEN") });
+      renderReading(container, reading);
+      const face = container.querySelectorAll<HTMLElement>(".card-face")[1];
+      face.querySelector("img")!.dispatchEvent(new Event("error"));
+      expect(face.classList.contains("no-image")).toBe(true);
+      expect(face.querySelector("img")).toBeNull();
+      expect(face.querySelector(".card-art > svg")).not.toBeNull();
+      // 番号と名前は残る
+      expect(face.querySelector(".card-numeral")?.textContent).toBe("A");
+      expect(face.querySelector(".card-name-ja")?.textContent).toBe("カップのエース");
+    });
   });
 
   it("does not show any picture on the back before flipping", () => {

@@ -3,10 +3,12 @@ import {
   deleteHistory,
   drawReading,
   listHistory,
+  loadCardImages,
   SPREADS,
   type HistoryEntry,
   type SpreadType,
 } from "./api";
+import { setCardImages } from "./card-image";
 import { armConfirm, formatDate, renderHistory } from "./history";
 import { renderReading, revealAll } from "./render";
 
@@ -16,6 +18,12 @@ function show(el: HTMLElement, text: string | null) {
   el.textContent = text ?? "";
   el.hidden = !text;
 }
+
+// カードのドット絵 (アプリのデータフォルダの cards/) を起動時に 1 回だけ読み込む。
+// 読めなくても SVG の簡易版で動くので、失敗は無視する。
+loadCardImages()
+  .then(setCardImages)
+  .catch(() => setCardImages([]));
 
 window.addEventListener("DOMContentLoaded", () => {
   const form = $<HTMLFormElement>("#draw-form");
