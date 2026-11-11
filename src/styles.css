@@ -21,7 +21,8 @@
   --card-w: 132px;
   --card-h: 224px;
 
-  font-family: "Hiragino Sans", Inter, system-ui, sans-serif;
+  /* 全体をヒラギノ丸ゴシックに統一 (macOS 標準搭載。W4 のみのため太字は合成される) */
+  font-family: "Hiragino Maru Gothic ProN", "ヒラギノ丸ゴ ProN", "Hiragino Sans", system-ui, sans-serif;
   color: var(--fg);
   background: var(--bg);
 }
@@ -306,7 +307,6 @@ select, button {
 .card[data-suit="Pentacles"] .card-face { --suit: var(--suit-pentacles); }
 
 .card-numeral {
-  font-family: "Times New Roman", "Hiragino Mincho ProN", serif;
   font-size: 1rem;
   letter-spacing: 0.08em;
   color: var(--suit);
@@ -319,7 +319,6 @@ select, button {
 }
 
 .card-name-ja {
-  font-family: "Hiragino Mincho ProN", serif;
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.25;
@@ -328,7 +327,6 @@ select, button {
 .name-part { display: inline-block; }
 
 .card-name {
-  font-family: "Times New Roman", serif;
   font-size: 0.68rem;
   line-height: 1.2;
   color: color-mix(in srgb, var(--ink) 65%, transparent);
