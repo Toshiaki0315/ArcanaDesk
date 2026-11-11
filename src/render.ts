@@ -39,9 +39,9 @@ function renderArt(card: Card): HTMLElement {
 }
 
 /** カードのドット絵。名前は文字で表示するので画像は装飾扱い (alt="")。 */
-function renderImage(card: Card): HTMLElement {
+function renderImage(url: string): HTMLImageElement {
   const img = el("img", "card-image") as HTMLImageElement;
-  img.src = cardImageUrl(card);
+  img.src = url;
   img.alt = "";
   img.decoding = "async";
   return img;
@@ -67,21 +67,22 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   back.append(el("span", "card-back-emblem", "✶"));
 
   const face = el("div", "card-face");
-  const image = renderImage(card);
-  // ドット絵は各自で用意するもの (git 管理外)。
-  // 読み込めたら SVG の上に重ねて表示し、無ければ外して SVG の簡易版を見せる。
-  image.addEventListener("load", () => face.classList.add("has-image"));
-  image.addEventListener("error", () => {
+  face.append(el("span", "card-numeral", cardNumeral(card)), renderArt(card));
+  // ドット絵は各自で用意するもの (起動時に読み込み済み)。あれば SVG の上に重ね、
+  // 無い・表示できない札は SVG の簡易版のままにする。
+  const url = cardImageUrl(card);
+  if (url) {
+    const image = renderImage(url);
+    image.addEventListener("load", () => face.classList.add("has-image"));
+    image.addEventListener("error", () => {
+      face.classList.add("no-image");
+      image.remove();
+    });
+    face.append(image);
+  } else {
     face.classList.add("no-image");
-    image.remove();
-  });
-  face.append(
-    el("span", "card-numeral", cardNumeral(card)),
-    renderArt(card),
-    image,
-    renderNameJa(cardNameJa(card)),
-    el("span", "card-name", card.name),
-  );
+  }
+  face.append(renderNameJa(cardNameJa(card)), el("span", "card-name", card.name));
 
   const inner = el("button", "card-inner") as HTMLButtonElement;
   inner.type = "button";

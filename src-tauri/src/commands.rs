@@ -8,12 +8,15 @@ use tauri::State;
 /// コマンド間で共有する状態。履歴ファイルの読み書きは Mutex で直列化する。
 pub struct AppState {
     pub history: Mutex<HistoryStore>,
+    /// カードのドット絵を置くフォルダ (各自で用意。無くてもよい)
+    pub cards_dir: PathBuf,
 }
 
 impl AppState {
-    pub fn new(history_path: impl Into<PathBuf>) -> Self {
+    pub fn new(history_path: impl Into<PathBuf>, cards_dir: impl Into<PathBuf>) -> Self {
         Self {
             history: Mutex::new(HistoryStore::new(history_path)),
+            cards_dir: cards_dir.into(),
         }
     }
 }
@@ -50,6 +53,12 @@ pub fn draw_reading(spread: SpreadType, state: State<'_, AppState>) -> DrawResul
         reading,
         history_error,
     }
+}
+
+/// カードのドット絵 78 枚分 (無い札は null)。フロントエンドが起動時に 1 回呼ぶ。
+#[tauri::command]
+pub fn card_images(state: State<'_, AppState>) -> Vec<Option<String>> {
+    crate::card_images::load_card_images(&state.cards_dir)
 }
 
 #[tauri::command]
@@ -93,7 +102,7 @@ mod tests {
 
         fn with_history_path(dir: TempDir, path: impl Fn(&TempDir) -> PathBuf) -> Self {
             let app = crate::register_commands(mock_builder())
-                .manage(AppState::new(path(&dir)))
+                .manage(AppState::new(path(&dir), dir.path().join("cards")))
                 .build(mock_context(noop_assets()))
                 .expect("failed to build mock app");
             let webview = tauri::WebviewWindowBuilder::new(&app, "main", Default::default())
@@ -135,6 +144,10 @@ mod tests {
                     .unwrap(),
             )
             .unwrap()
+        }
+
+        fn card_images(&self) -> Vec<Option<String>> {
+            serde_json::from_value(self.invoke("card_images", json!({})).unwrap()).unwrap()
         }
 
         fn history(&self) -> Vec<HistoryEntry> {
@@ -282,5 +295,31 @@ mod tests {
         let h = Harness::with_history_path(dir, |d| d.path().to_path_buf());
         assert!(h.invoke("delete_history", json!({ "id": 1 })).is_err());
         assert!(h.invoke("clear_history", json!({})).is_err());
+    }
+
+    #[test]
+    fn test_card_images_are_empty_when_no_folder_exists() {
+        let h = Harness::new();
+        let images = h.card_images();
+        assert_eq!(images.len(), crate::card_images::CARD_COUNT);
+        assert!(images.iter().all(Option::is_none));
+    }
+
+    #[test]
+    fn test_card_images_reads_the_cards_folder_at_call_time() {
+        let h = Harness::new();
+        let cards = h.dir.path().join("cards");
+        std::fs::create_dir(&cards).unwrap();
+        std::fs::write(
+            cards.join("13.png"),
+            [0x89, b'P', b'N', b'G', 0x0d, 0x0a, 0x1a, 0x0a, 9],
+        )
+        .unwrap();
+        let images = h.card_images();
+        assert!(images[13]
+            .as_deref()
+            .unwrap()
+            .starts_with("data:image/png;base64,"));
+        assert_eq!(images.iter().filter(|i| i.is_some()).count(), 1);
     }
 }

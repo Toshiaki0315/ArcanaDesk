@@ -25,11 +25,11 @@ Tauri v2, Rust, TypeScriptを用いて開発されています。
 | `make dev` | 開発モードで起動 (コードを変えると自動で反映) | — |
 | `make app` | リリース版のアプリを作る | `src-tauri/target/release/bundle/macos/ArcanaDesk.app` |
 | `make dmg` | 配布用のディスクイメージを作る (.app も一緒に作る) | `src-tauri/target/release/bundle/dmg/ArcanaDesk_<版>_aarch64.dmg` |
-| `make cards` | カードのドット絵を用意する (任意) | `public/cards/00.png`〜`77.png` |
+| `make cards` | カードのドット絵を用意する (任意) | `~/Library/Application Support/com.toshiaki.arcanadesk/cards/00.png`〜`77.png` |
 
 - `make` だけを実行すると、コマンドの一覧が表示されます。
 - 依存パッケージが未インストール、または `package.json` / `pnpm-lock.yaml` より古い場合は、先に `pnpm install` を実行します。
-- `make dev` / `make app` / `make dmg` は、`public/cards/` にドット絵があればそれを使い、無ければ簡易版の SVG の絵でビルドします。どちらを使うかは実行時に表示されます。
+- カードのドット絵はアプリに含めず、起動時に読み込みます。`make dev` / `make app` / `make dmg` は、どちらの絵が使われるかを表示するだけで、画像を入れ替えてもビルドし直す必要はありません。
 - 署名・公証はしていないので、作った .app / .dmg を別の Mac で開くと警告が出ます。
 
 ## テスト
@@ -56,7 +56,8 @@ GitHub Actions (`.github/workflows/ci.yml`) が main への push と PR ごと�
 - `src/api.ts` — Rust と共通の型定義と `drawReading()` (invoke ラッパー)
 - `src/card.ts` — カード表面の番号 (ローマ数字 / ランク)
 - `src/art.ts` / `src/art-major.ts` — 簡易版のカードの絵 (オリジナルの SVG。ドット絵が無いときに表示)
-- `src/card-image.ts` — カードのドット絵の URL (`public/cards/NN.png`、NN はカード id)
+- `src/card-image.ts` — 起動時に読み込んだカードのドット絵を保持する
+- `src-tauri/src/card_images.rs` — アプリのデータフォルダの `cards/NN.png` を起動時に読み込む (`card_images` コマンド)
 - `src/meanings.ts` — 78枚の日本語名と正位置・逆位置の意味 (カード id で引く)
 - `src/render.ts` — カードと凡例の描画 (裏向きで配り、クリック / すべてめくるで表に返す)
 - `src/bubble.ts` — 表向きのカードをクリックしたときの解説の吹き出し
@@ -75,21 +76,30 @@ GitHub Actions (`.github/workflows/ci.yml`) が main への push と PR ごと�
 カードの絵は 2 種類あります。
 
 - **簡易版 (標準):** オリジナルの SVG の絵です (`src/art.ts`)。コードに含まれているので、何も用意しなくても表示されます。
-- **ドット絵 (任意):** ライダー・ウェイト・スミス版タロット (1909 年、絵: Pamela Colman Smith、パブリックドメイン) をドット絵にしたものです。`public/cards/00.png`〜`77.png` に置くと、簡易版の代わりに表示されます。
+- **ドット絵 (任意):** ライダー・ウェイト・スミス版タロット (1909 年、絵: Pamela Colman Smith、パブリックドメイン) をドット絵にしたものです。
 
-ドット絵はリポジトリに含めていないので、使う場合は手元で用意します。
+ドット絵はリポジトリにもアプリにも含めていません。アプリは**起動時に**次のフォルダを読み、画像がある札はドット絵、無い札は簡易版で表示します。
 
+```
+~/Library/Application Support/com.toshiaki.arcanadesk/cards/00.png 〜 77.png
+```
+
+- ファイル名はカード id 順です (00 = 愚者 … 21 = 世界、22〜35 = ワンド、36〜49 = カップ、50〜63 = ソード、64〜77 = ペンタクル。各スートはエース〜キングの順)。
+- 画像を入れ替えたら、**アプリを起動し直すだけ**で反映されます。ビルドし直す必要はありません。`make dev` / `make app` / `make dmg` のどれで起動したアプリでも、同じフォルダを読みます。
+- PNG 以外のファイルや、1MB を超えるファイルは使われません (その札は簡易版になります)。
+
+### ドット絵を用意する
 1. Pillow をインストールします (まだの場合)。
    ```bash
    python3 -m pip install Pillow
    ```
-2. 原画 78 枚 (約 66MB) を Wikimedia Commons から取得し、ドット絵に変換します。原画は `.cards-src/` (git 管理外) に保存され、2 回目以降は再利用されます。
+2. 原画 78 枚 (約 66MB) を Wikimedia Commons から取得し、ドット絵に変換して上のフォルダへ書き出します。原画は `.cards-src/` (git 管理外) に保存され、2 回目以降は再利用されます。
    ```bash
    make cards
    ```
-3. 以後の `make dev` / `make app` / `make dmg` では、ドット絵が使われます。
+3. アプリを起動し直すと、ドット絵が使われます。
 
 - 取得元: `scripts/rws-sources.json` (78 枚の Wikimedia Commons の URL)
 - 取得: `scripts/fetch-cards.py` (1 枚ごとに間隔を空け、混雑時は待って再試行。途中で止まっても再実行で続きから)
 - 変換: `scripts/pixelate-cards.py` (縁・番号・題名の帯を切り落とし、テーマに合わせて暗くしてから、幅 64 ドット・32 色に減色。明るさや色数はスクリプト冒頭の値で変えられます)
-- テスト (`pnpm test`) はドット絵を使いません。画像の有無による表示の切り替えは、画像の読み込み成功・失敗を模して確かめています。
+- テスト (`pnpm test` / `cargo test`) はドット絵を使いません。画像の読み込みは一時フォルダに作ったテスト用のファイルで、表示の切り替えは読み込み結果を模して確かめています。

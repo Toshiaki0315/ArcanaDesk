@@ -5,6 +5,7 @@ import {
   deleteHistory,
   drawReading,
   listHistory,
+  loadCardImages,
   orientationLabel,
   spreadLabel,
   SPREADS,
@@ -97,5 +98,14 @@ describe("history API", () => {
     const calls = recordCalls(null);
     await clearHistory();
     expect(calls).toEqual([{ cmd: "clear_history", args: {} }]);
+  });
+});
+
+describe("loadCardImages", () => {
+  it("invokes card_images and returns the images", async () => {
+    const list = [null, "data:image/png;base64,AAA"];
+    const calls = recordCalls(list);
+    expect(await loadCardImages()).toEqual(list);
+    expect(calls).toEqual([{ cmd: "card_images", args: {} }]);
   });
 });
