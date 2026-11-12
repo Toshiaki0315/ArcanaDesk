@@ -50,10 +50,17 @@ function renderBubble(spread: SpreadType, { position, position_name, card }: Dra
   const bubble = el("div", "card-bubble");
   bubble.setAttribute("role", "dialog");
   bubble.setAttribute("aria-label", `${name}の解説`);
+  // 見出し: どの位置のカードか (「⑥ 近未来」) と、その位置が表すもの
+  const heading = el("div", "bubble-heading");
+  heading.append(
+    el("span", "bubble-index", String(position + 1)),
+    el("span", "bubble-position-name", position_name),
+    el("p", "bubble-position", positionDescription(spread, position)),
+  );
   bubble.append(
+    heading,
     el("p", "bubble-title", `${name}（${orientationLabel(card)}）`),
     el("p", "bubble-subtitle", card.name),
-    el("p", "bubble-position", `${position_name} — ${positionDescription(spread, position)}`),
     el("p", "bubble-meaning", card.is_reversed ? meaning.reversed : meaning.upright),
     el(
       "p",
