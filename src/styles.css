@@ -126,7 +126,6 @@ select, button {
 }
 
 .card-index { display: none; }
-.reading-legend { display: none; }
 
 /* ---- Celtic cross ----
  * 8 本の半カード行に配置する。十字は行 2〜7、杖 (7〜10) は行 1〜8。
@@ -192,52 +191,6 @@ select, button {
 .reading[data-spread="celtic_cross"] .card-art { padding: 2px 4px; }
 .reading[data-spread="celtic_cross"] .card-name-ja { padding: 3px 3px 4px; font-size: 0.62rem; }
 .reading[data-spread="celtic_cross"] .card-back-emblem { width: 36px; height: 36px; font-size: 1.1rem; }
-
-.reading[data-spread="celtic_cross"] .reading-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 360px;
-  text-align: left;
-  font-size: 0.85rem;
-}
-
-.legend-item {
-  display: grid;
-  grid-template-columns: 22px 6.5em 1fr;
-  align-items: center;
-  gap: 2px 8px;
-  padding: 5px 10px;
-  border-radius: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-.legend-index {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.legend-position { color: var(--muted); }
-.legend-card { color: var(--muted); }
-.legend-item.revealed .legend-card { color: var(--fg); font-weight: 600; }
-.legend-meaning {
-  grid-column: 2 / -1;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-  font-size: 0.78rem;
-  line-height: 1.5;
-  color: var(--fg);
-}
-.legend-meaning:empty { display: none; }
 
 .card {
   display: flex;
@@ -471,14 +424,33 @@ select, button {
 }
 
 .card-bubble p { margin: 0; }
+/* 見出し: 位置の番号 (カードの番号と同じ紫の丸) + 位置の名前、その下に位置の説明 */
+.card-bubble .bubble-heading {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 4px;
+}
+.card-bubble .bubble-index {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.card-bubble .bubble-position-name { color: var(--accent); font-size: 0.95rem; font-weight: 600; }
+.card-bubble .bubble-position { grid-column: 2; font-size: 0.78rem; color: var(--muted); }
 .card-bubble .bubble-title { color: var(--gold); font-size: 1.05rem; -webkit-text-stroke: 0.4px currentColor; }
 .card-bubble .bubble-subtitle { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
-.card-bubble .bubble-position {
+.card-bubble .bubble-title {
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--border);
-  font-size: 0.82rem;
-  color: var(--accent);
 }
 .card-bubble .bubble-meaning { margin-top: 8px; font-size: 0.95rem; line-height: 1.6; }
 .card-bubble .bubble-other { margin-top: 8px; font-size: 0.78rem; color: var(--muted); line-height: 1.5; }

@@ -15,7 +15,6 @@ function el(tag: string, className: string, text?: string): HTMLElement {
 /*
  * <div data-spread="…">                 ← container
  *   <ul class="reading-cards"> カード… </ul>
- *   <ol class="reading-legend"> 位置ごとの凡例… </ol>
  * </div>
  *
  * <li class="card [reversed] [flipped]" data-position="0">
@@ -108,26 +107,12 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   return li;
 }
 
-function renderLegendItem({ position, position_name }: DrawnCard): HTMLElement {
-  const li = el("li", "legend-item");
-  li.dataset.position = String(position);
-  li.append(
-    el("span", "legend-index", String(position + 1)),
-    el("span", "legend-position", position_name),
-    el("span", "legend-card", "？"),
-    el("span", "legend-meaning", ""),
-  );
-  return li;
-}
-
 /** 展開結果を裏向きでコンテナに描画する (前回の結果は置き換える)。 */
 export function renderReading(container: HTMLElement, reading: Reading): void {
   container.dataset.spread = reading.spread;
   const cards = el("ul", "reading-cards");
   cards.append(...reading.cards.map(renderCard));
-  const legend = el("ol", "reading-legend");
-  legend.append(...reading.cards.map(renderLegendItem));
-  container.replaceChildren(cards, legend);
+  container.replaceChildren(cards);
   wireBubble(container);
 }
 
@@ -142,16 +127,6 @@ export function revealCard(cardEl: HTMLElement): void {
   cardEl
     .querySelector(".card-inner")
     ?.setAttribute("aria-label", `${position}: ${name}（${orientation}）`);
-
-  const legendItem = cardEl
-    .closest("[data-spread]")
-    ?.querySelector(`.reading-legend > [data-position="${cardEl.dataset.position}"]`);
-  if (legendItem) {
-    legendItem.classList.add("revealed");
-    legendItem.querySelector(".legend-card")!.textContent = `${name}（${orientation}）`;
-    legendItem.querySelector(".legend-meaning")!.textContent =
-      cardEl.querySelector(".card-meaning")!.textContent;
-  }
 }
 
 export function revealAll(container: HTMLElement): void {

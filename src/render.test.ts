@@ -232,52 +232,11 @@ describe("spread layout", () => {
   });
 });
 
-describe("legend", () => {
+describe("revealCard", () => {
   beforeEach(() => renderReading(container, reading));
 
-  const items = () => [...container.querySelectorAll<HTMLElement>(".reading-legend > li")];
-
-  it("lists every position in order", () => {
-    expect(items().map((li) => li.querySelector(".legend-position")?.textContent)).toEqual([
-      "過去",
-      "現在",
-      "未来",
-    ]);
-    expect(items().map((li) => li.querySelector(".legend-index")?.textContent)).toEqual([
-      "1",
-      "2",
-      "3",
-    ]);
-  });
-
-  it("hides card names and meanings until revealed", () => {
-    expect(items().map((li) => li.querySelector(".legend-card")?.textContent)).toEqual([
-      "？",
-      "？",
-      "？",
-    ]);
-    expect(items().map((li) => li.querySelector(".legend-meaning")?.textContent)).toEqual([
-      "",
-      "",
-      "",
-    ]);
-  });
-
-  it("fills in the matching legend entry when a card is revealed", () => {
-    revealCard(container.querySelectorAll<HTMLElement>(".card")[1]);
-    const [first, second] = items();
-    expect(first.querySelector(".legend-card")?.textContent).toBe("？");
-    expect(second.querySelector(".legend-card")?.textContent).toBe("カップのエース（逆位置）");
-    expect(second.querySelector(".legend-meaning")?.textContent).toBe(
-      cardMeaning(reading.cards[1].card).reversed,
-    );
-    expect(second.classList.contains("revealed")).toBe(true);
-  });
-
-  it("revealAll fills in the whole legend", () => {
-    revealAll(container);
-    expect(items()).toHaveLength(3);
-    expect(items().every((li) => li.classList.contains("revealed"))).toBe(true);
+  it("does not render a separate legend (positions are shown in the bubble)", () => {
+    expect(container.querySelector(".reading-legend")).toBeNull();
   });
 
   it("revealing a detached card does not throw", () => {
@@ -318,13 +277,24 @@ describe("explanation bubble", () => {
     expect(button(1).getAttribute("aria-expanded")).toBe("true");
   });
 
+  it("puts the position number and name at the top, as the heading", () => {
+    revealAll(root);
+    button(2).click();
+    const first = bubble()!.firstElementChild!;
+    expect(first.classList.contains("bubble-heading")).toBe(true);
+    expect(first.querySelector(".bubble-index")?.textContent).toBe("3");
+    expect(first.querySelector(".bubble-position-name")?.textContent).toBe("未来");
+  });
+
   it("explains the card, its position and the meaning for its orientation", () => {
     revealAll(root);
     button(1).click();
     const { card } = reading.cards[1];
     expect(text(".bubble-title")).toBe("カップのエース（逆位置）");
     expect(text(".bubble-subtitle")).toBe("Ace of Cups");
-    expect(text(".bubble-position")).toBe(`現在 — ${positionDescription("three_card", 1)}`);
+    expect(text(".bubble-heading .bubble-index")).toBe("2");
+    expect(text(".bubble-heading .bubble-position-name")).toBe("現在");
+    expect(text(".bubble-position")).toBe(positionDescription("three_card", 1));
     expect(text(".bubble-meaning")).toBe(cardMeaning(card).reversed);
     expect(text(".bubble-other")).toBe(`正位置では: ${cardMeaning(card).upright}`);
   });
