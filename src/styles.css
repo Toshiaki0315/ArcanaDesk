@@ -65,7 +65,7 @@ body::before {
 
 .container {
   position: relative;
-  max-width: 1040px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 20px 16px 32px;
   text-align: center;
@@ -85,7 +85,52 @@ h1 {
   text-shadow: 0 0 24px rgb(212 175 90 / 0.35);
 }
 
-.controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+/*
+ * 左にボタンと履歴 (sidebar)、右に展開 (stage)。
+ * 幅が狭いときは 1 列にして、ボタンと履歴を展開の上に出す。
+ */
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  align-items: start;
+  gap: 32px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+.sidebar .error { margin: 0; }
+.sidebar .error[hidden] { display: none; }
+
+.controls { display: flex; flex-direction: column; gap: 8px; }
+/* リストボックスとボタンの高さをそろえる (文字の行の高さの計算が両者で違うため固定する) */
+.controls select,
+.controls button { box-sizing: border-box; height: 42px; }
+
+/*
+ * macOS 標準の見た目のリストボックスは高さを変えられないため、標準の見た目を外して
+ * ボタンと同じ枠・余白にし、右端の矢印は自前で描く。
+ */
+.controls select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 1.5 9 4.5M3 7.5 6 10.5 9 7.5' fill='none' stroke='%239a93ad' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .controls { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+}
 
 select, button {
   font: inherit;
@@ -107,7 +152,7 @@ select, button {
 
 .reading {
   position: relative; /* 解説の吹き出し (.card-bubble) の配置の基準 */
-  margin: 24px 0 0;
+  margin: 8px 0 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -136,17 +181,21 @@ select, button {
  *                                  [7]
  */
 .reading[data-spread="celtic_cross"] {
-  --card-w: 84px;
-  --card-h: 143px;
+  --card-w: 96px;
+  --card-h: 163px;
   --row-gap: 6px;
+  /* 隣のカードとの間 (横向きの 2 枚目のはみ出しぶんは別に足す) */
+  --col-gap: 32px;
+  /* 十字と杖 (7〜10) の間に足す余白 */
+  --staff-gap: 40px;
 }
 
 .reading[data-spread="celtic_cross"] .reading-cards {
   display: grid;
-  grid-template-columns: repeat(3, var(--card-w)) 0 var(--card-w);
+  grid-template-columns: repeat(3, var(--card-w)) var(--staff-gap) var(--card-w);
   grid-template-rows: repeat(8, calc(var(--card-h) / 2));
   /* 横向きの 2 枚目 (幅 = card-h) が隣のカードに重ならない間隔 */
-  column-gap: calc((var(--card-h) - var(--card-w)) / 2 + 10px);
+  column-gap: calc((var(--card-h) - var(--card-w)) / 2 + var(--col-gap));
   row-gap: var(--row-gap);
 }
 
@@ -474,11 +523,7 @@ select, button {
 
 /* ---- history ---- */
 
-.history {
-  max-width: 640px;
-  margin: 48px auto 0;
-  text-align: left;
-}
+.history { text-align: left; }
 
 .history summary {
   cursor: pointer;
@@ -492,12 +537,16 @@ select, button {
   list-style: none;
   padding: 0;
   margin: 8px 0;
+  /* サイドバーに収まるよう、件数が多いときはこの中だけスクロールする */
+  max-height: calc(100vh - 340px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 .history-item {
+  flex-shrink: 0; /* 一覧がスクロールするとき、項目が縮んで 2 行目が隠れないように */
   display: flex;
   align-items: stretch;
   border: 1px solid var(--border);
@@ -509,9 +558,11 @@ select, button {
 .history-open {
   flex: 1;
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  /* 1 行目に日時とスプレッド、2 行目にカード */
+  grid-template-columns: auto 1fr;
   align-items: baseline;
-  gap: 12px;
+  gap: 2px 10px;
+  padding: 8px 10px;
   border: none;
   border-radius: 0;
   background: none;
@@ -524,6 +575,7 @@ select, button {
 .history-date { color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
 .history-spread { font-weight: 600; font-size: 0.9rem; }
 .history-summary {
+  grid-column: 1 / -1;
   font-size: 0.85rem;
   overflow: hidden;
   text-overflow: ellipsis;
