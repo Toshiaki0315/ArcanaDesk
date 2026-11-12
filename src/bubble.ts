@@ -38,13 +38,29 @@ export function toggleBubble(root: HTMLElement, cardEl: HTMLElement): void {
   closeBubble(root);
   if (wasOpen) return;
 
-  const bubble = renderBubble(root.dataset.spread as SpreadType, drawnByCard.get(cardEl)!);
+  const bubble = renderBubble(root.dataset.spread as SpreadType, drawnByCard.get(cardEl)!, cardEl);
   root.append(bubble);
   button.setAttribute("aria-expanded", "true");
   place(root, button, bubble);
 }
 
-function renderBubble(spread: SpreadType, { position, position_name, card }: DrawnCard): HTMLElement {
+/**
+ * 吹き出しに載せるカードの絵。展開にあるカードの表面 (簡易版の SVG と、読み込めていればドット絵) を
+ * そのまま複製して、どのカードの説明かがひと目で分かるようにする。説明は文字で書いてあるので装飾扱い。
+ */
+function renderPicture(cardEl: HTMLElement, card: DrawnCard["card"]): HTMLElement {
+  const picture = el("div", card.is_reversed ? "bubble-card reversed" : "bubble-card");
+  picture.setAttribute("aria-hidden", "true");
+  picture.dataset.suit = card.suit;
+  picture.append(cardEl.querySelector(".card-face")!.cloneNode(true));
+  return picture;
+}
+
+function renderBubble(
+  spread: SpreadType,
+  { position, position_name, card }: DrawnCard,
+  cardEl: HTMLElement,
+): HTMLElement {
   const name = cardNameJa(card);
   const meaning = cardMeaning(card);
   const bubble = el("div", "card-bubble");
@@ -56,7 +72,8 @@ function renderBubble(spread: SpreadType, { position, position_name, card }: Dra
     el("p", "bubble-position-name", position_name),
     el("p", "bubble-position", positionDescription(spread, position)),
   );
-  bubble.append(
+  const text = el("div", "bubble-text");
+  text.append(
     heading,
     el("p", "bubble-title", `${name}（${orientationLabel(card)}）`),
     el("p", "bubble-subtitle", card.name),
@@ -67,10 +84,15 @@ function renderBubble(spread: SpreadType, { position, position_name, card }: Dra
       card.is_reversed ? `正位置では: ${meaning.upright}` : `逆位置では: ${meaning.reversed}`,
     ),
   );
+  // 左に説明、右にカードの絵
+  const body = el("div", "bubble-body");
+  body.append(text, renderPicture(cardEl, card));
+  bubble.append(body);
   return bubble;
 }
 
-const BUBBLE_HALF_WIDTH = 150;
+/** 吹き出しの幅の半分 (CSS の .card-bubble の width: 430px と合わせる) */
+const BUBBLE_HALF_WIDTH = 215;
 const GAP = 12;
 
 /**

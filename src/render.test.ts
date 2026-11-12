@@ -279,10 +279,47 @@ describe("explanation bubble", () => {
   it("puts the position name at the top, as the heading, without a number", () => {
     revealAll(root);
     button(2).click();
-    const first = bubble()!.firstElementChild!;
+    const first = bubble()!.querySelector(".bubble-text")!.firstElementChild!;
     expect(first.classList.contains("bubble-heading")).toBe(true);
     expect(first.querySelector(".bubble-index")).toBeNull();
     expect(first.querySelector(".bubble-position-name")?.textContent).toBe("未来");
+  });
+
+  it("shows the card's picture to the right of the text", () => {
+    revealAll(root);
+    button(1).click();
+    const body = bubble()!.querySelector(".bubble-body")!;
+    expect([...body.children].map((c) => c.className)).toEqual([
+      "bubble-text",
+      "bubble-card reversed",
+    ]);
+    const picture = body.querySelector<HTMLElement>(".bubble-card")!;
+    // 説明は文字で書いてあるので、絵は装飾扱い
+    expect(picture.getAttribute("aria-hidden")).toBe("true");
+    expect(picture.dataset.suit).toBe("Cups");
+    expect(picture.querySelector(".card-face .card-art > svg")?.getAttribute("data-suit")).toBe("Cups");
+    expect(picture.querySelector(".card-name-ja")?.textContent).toBe("カップのエース");
+  });
+
+  it("shows an upright card's picture the right way up", () => {
+    revealAll(root);
+    button(0).click();
+    expect(bubble()!.querySelector(".bubble-card")?.className).toBe("bubble-card");
+  });
+
+  it("uses the loaded pixel art in the bubble too", () => {
+    setCardImages(Array.from({ length: 78 }, (_, id) => (id === 21 ? "data:image/png;base64,W" : null)));
+    try {
+      renderReading(root, reading);
+      revealAll(root);
+      root.querySelectorAll<HTMLElement>(".card-face img")[0].dispatchEvent(new Event("load"));
+      button(2).click();
+      const face = bubble()!.querySelector(".bubble-card .card-face")!;
+      expect(face.querySelector("img")?.getAttribute("src")).toBe("data:image/png;base64,W");
+      expect(face.classList.contains("has-image")).toBe(true);
+    } finally {
+      setCardImages([]);
+    }
   });
 
   it("explains the card, its position and the meaning for its orientation", () => {
@@ -393,15 +430,15 @@ describe("explanation bubble", () => {
       layout(1000, 0, 100);
       revealAll(root);
       button(0).click();
-      expect(bubble()?.style.left).toBe("150px");
-      expect(bubble()?.style.getPropertyValue("--arrow-offset")).toBe("-100px");
+      expect(bubble()?.style.left).toBe("215px");
+      expect(bubble()?.style.getPropertyValue("--arrow-offset")).toBe("-165px");
     });
 
     it("centres the bubble when the spread is narrower than the bubble", () => {
-      layout(200, 50, 100);
+      layout(400, 50, 100);
       revealAll(root);
       button(0).click();
-      expect(bubble()?.style.left).toBe("100px");
+      expect(bubble()?.style.left).toBe("200px");
     });
   });
 });
