@@ -226,9 +226,8 @@ describe("spread layout", () => {
     expect([...cards].map((c) => c.dataset.position)).toEqual(["0", "1", "2"]);
   });
 
-  it("shows a 1-based position number on each card", () => {
-    const indexes = container.querySelectorAll(".card .card-index");
-    expect([...indexes].map((e) => e.textContent)).toEqual(["1", "2", "3"]);
+  it("does not show position numbers on the cards (the bubble names the position)", () => {
+    expect(container.querySelector(".card .card-index")).toBeNull();
   });
 });
 
@@ -277,12 +276,12 @@ describe("explanation bubble", () => {
     expect(button(1).getAttribute("aria-expanded")).toBe("true");
   });
 
-  it("puts the position number and name at the top, as the heading", () => {
+  it("puts the position name at the top, as the heading, without a number", () => {
     revealAll(root);
     button(2).click();
     const first = bubble()!.firstElementChild!;
     expect(first.classList.contains("bubble-heading")).toBe(true);
-    expect(first.querySelector(".bubble-index")?.textContent).toBe("3");
+    expect(first.querySelector(".bubble-index")).toBeNull();
     expect(first.querySelector(".bubble-position-name")?.textContent).toBe("未来");
   });
 
@@ -292,7 +291,6 @@ describe("explanation bubble", () => {
     const { card } = reading.cards[1];
     expect(text(".bubble-title")).toBe("カップのエース（逆位置）");
     expect(text(".bubble-subtitle")).toBe("Ace of Cups");
-    expect(text(".bubble-heading .bubble-index")).toBe("2");
     expect(text(".bubble-heading .bubble-position-name")).toBe("現在");
     expect(text(".bubble-position")).toBe(positionDescription("three_card", 1));
     expect(text(".bubble-meaning")).toBe(cardMeaning(card).reversed);

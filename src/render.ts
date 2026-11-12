@@ -18,7 +18,6 @@ function el(tag: string, className: string, text?: string): HTMLElement {
  * </div>
  *
  * <li class="card [reversed] [flipped]" data-position="0">
- *   <span class="card-index">1</span>
  *   <span class="card-position">過去</span>
  *   <button class="card-inner">            ← 3D 回転する本体
  *     <div class="card-back">…</div>
@@ -98,7 +97,6 @@ function renderCard(drawn: DrawnCard, index: number): HTMLElement {
   attachCard(li, drawn);
 
   li.append(
-    el("span", "card-index", String(drawn.position + 1)),
     el("span", "card-position", position_name),
     inner,
     el("span", "card-orientation", orientationLabel(card)),
