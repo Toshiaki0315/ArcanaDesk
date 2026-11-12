@@ -170,7 +170,6 @@ select, button {
   gap: 24px 20px;
 }
 
-.card-index { display: none; }
 
 /* ---- Celtic cross ----
  * 8 本の半カード行に配置する。十字は行 2〜7、杖 (7〜10) は行 1〜8。
@@ -219,22 +218,6 @@ select, button {
 .reading[data-spread="celtic_cross"] .card-orientation,
 .reading[data-spread="celtic_cross"] .card-meaning,
 .reading[data-spread="celtic_cross"] .card-name { display: none; }
-
-.reading[data-spread="celtic_cross"] .card-index {
-  display: grid;
-  place-items: center;
-  position: absolute;
-  top: -8px;
-  left: -8px;
-  z-index: 2;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
 
 .reading[data-spread="celtic_cross"] .card-numeral { margin-top: 5px; padding: 0 6px; font-size: 0.7rem; }
 .reading[data-spread="celtic_cross"] .card-art { padding: 2px 4px; }
@@ -473,27 +456,9 @@ select, button {
 }
 
 .card-bubble p { margin: 0; }
-/* 見出し: 位置の番号 (カードの番号と同じ紫の丸) + 位置の名前、その下に位置の説明 */
-.card-bubble .bubble-heading {
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  align-items: center;
-  column-gap: 8px;
-  row-gap: 4px;
-}
-.card-bubble .bubble-index {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
+/* 見出し: 位置の名前、その下に位置の説明 */
 .card-bubble .bubble-position-name { color: var(--accent); font-size: 0.95rem; font-weight: 600; }
-.card-bubble .bubble-position { grid-column: 2; font-size: 0.78rem; color: var(--muted); }
+.card-bubble .bubble-position { margin-top: 4px; font-size: 0.78rem; color: var(--muted); }
 .card-bubble .bubble-title { color: var(--gold); font-size: 1.05rem; -webkit-text-stroke: 0.4px currentColor; }
 .card-bubble .bubble-subtitle { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
 .card-bubble .bubble-title {
