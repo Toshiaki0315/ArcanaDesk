@@ -214,14 +214,14 @@ select, button {
 .reading[data-spread="celtic_cross"] .card[data-position="8"] { grid-area: 3 / 5 / span 2; }
 .reading[data-spread="celtic_cross"] .card[data-position="9"] { grid-area: 1 / 5 / span 2; }
 
-.reading[data-spread="celtic_cross"] .card-position,
-.reading[data-spread="celtic_cross"] .card-orientation,
-.reading[data-spread="celtic_cross"] .card-meaning,
-.reading[data-spread="celtic_cross"] .card-name { display: none; }
+.reading[data-spread="celtic_cross"] .card .card-position,
+.reading[data-spread="celtic_cross"] .card .card-orientation,
+.reading[data-spread="celtic_cross"] .card .card-meaning,
+.reading[data-spread="celtic_cross"] .card .card-name { display: none; }
 
-.reading[data-spread="celtic_cross"] .card-numeral { margin-top: 5px; padding: 0 6px; font-size: 0.7rem; }
-.reading[data-spread="celtic_cross"] .card-art { padding: 2px 4px; }
-.reading[data-spread="celtic_cross"] .card-name-ja { padding: 3px 3px 4px; font-size: 0.62rem; }
+.reading[data-spread="celtic_cross"] .card .card-numeral { margin-top: 5px; padding: 0 6px; font-size: 0.7rem; }
+.reading[data-spread="celtic_cross"] .card .card-art { padding: 2px 4px; }
+.reading[data-spread="celtic_cross"] .card .card-name-ja { padding: 3px 3px 4px; font-size: 0.62rem; }
 .reading[data-spread="celtic_cross"] .card-back-emblem { width: 36px; height: 36px; font-size: 1.1rem; }
 
 .card {
@@ -323,10 +323,11 @@ select, button {
 }
 .card.reversed .card-face { transform: rotateY(180deg) rotateZ(180deg); }
 
-.card[data-suit="Wands"] .card-face { --suit: var(--suit-wands); }
-.card[data-suit="Cups"] .card-face { --suit: var(--suit-cups); }
-.card[data-suit="Swords"] .card-face { --suit: var(--suit-swords); }
-.card[data-suit="Pentacles"] .card-face { --suit: var(--suit-pentacles); }
+/* 展開のカードと、吹き出しに載せたカードの絵 (.bubble-card) で共通 */
+:is(.card, .bubble-card)[data-suit="Wands"] .card-face { --suit: var(--suit-wands); }
+:is(.card, .bubble-card)[data-suit="Cups"] .card-face { --suit: var(--suit-cups); }
+:is(.card, .bubble-card)[data-suit="Swords"] .card-face { --suit: var(--suit-swords); }
+:is(.card, .bubble-card)[data-suit="Pentacles"] .card-face { --suit: var(--suit-pentacles); }
 
 /*
  * カードの絵は 2 段構え:
@@ -423,7 +424,7 @@ select, button {
   --arrow-offset: 0px;
   position: absolute;
   z-index: 10;
-  width: 300px;
+  width: 430px; /* bubble.ts の BUBBLE_HALF_WIDTH の 2 倍 */
   box-sizing: border-box;
   transform: translateX(-50%);
   padding: 14px 16px;
@@ -456,6 +457,27 @@ select, button {
 }
 
 .card-bubble p { margin: 0; }
+
+/* 左に説明、右にカードの絵 */
+.card-bubble .bubble-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 108px;
+  align-items: start;
+  gap: 14px;
+}
+
+/* 展開のカードの表面を複製したもの。裏返し (rotateY) を外して、そのまま表を見せる */
+.bubble-card {
+  position: relative;
+  width: 108px;
+  height: 184px;
+}
+.bubble-card .card-face { transform: none; }
+.bubble-card.reversed .card-face { transform: rotateZ(180deg); }
+.bubble-card .card-numeral { margin-top: 6px; font-size: 0.72rem; }
+.bubble-card .card-art { padding: 2px 6px; }
+.bubble-card .card-name-ja { font-size: 0.7rem; padding-bottom: 2px; }
+.bubble-card .card-name { font-size: 0.56rem; }
 /* 見出し: 位置の名前、その下に位置の説明 */
 .card-bubble .bubble-position-name { color: var(--accent); font-size: 0.95rem; font-weight: 600; }
 .card-bubble .bubble-position { margin-top: 4px; font-size: 0.78rem; color: var(--muted); }
